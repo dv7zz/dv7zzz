@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>OTIMIZAÇÃO PRO @davi.santxs7</title>
+    <style>
+        :root {
+            --primary: #ff0000;
+            --secondary: #1a1a1a;
+            --text-main: #ffffff;
+            --text-dim: #888888;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.08);
+        }
+
+        body { 
+            margin: 0; padding: 0; 
+            background: #000; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Background Animado */
+        canvas { position: fixed; top: 0; left: 0; z-index: -1; width: 100%; height: 100%; opacity: 0.4; }
+
+        .container {
+            width: 100%;
+            max-width: 360px;
+            padding: calc(50px + env(safe-area-inset-top)) 20px 40px;
+            box-sizing: border-box;
+        }
+
+        /* Card Estilo App */
+        .app-card {
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border-radius: 32px;
+            border: 1px solid var(--border);
+            padding: 30px 25px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+            text-align: center;
+        }
+
+        /* Logo e Títulos */
+        .icon-wrapper {
+            width: 80px; height: 80px;
+            background: linear-gradient(145deg, var(--primary), #800000);
+            border-radius: 24px;
+            margin: 0 auto 20px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.3);
+        }
+
+        h2 { margin: 0 0 5px; font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+        .subtitle { color: var(--text-dim); font-size: 13px; margin-bottom: 30px; display: block; }
+
+        /* Inputs e Botões */
+        input[type="password"] {
+            width: 100%; padding: 18px;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            color: white; font-size: 16px; text-align: center;
+            margin-bottom: 20px; box-sizing: border-box;
+            transition: 0.3s; outline: none;
+        }
+        input[type="password"]:focus { border-color: var(--primary); background: rgba(255,0,0,0.02); }
+
+        .btn-main {
+            width: 100%; padding: 18px;
+            background: var(--primary);
+            color: white; border: none;
+            border-radius: 18px;
+            font-weight: 700; font-size: 15px;
+            cursor: pointer; transition: 0.3s;
+            box-shadow: 0 8px 20px rgba(255, 0, 0, 0.2);
+        }
+        .btn-main:active { transform: scale(0.97); }
+
+        /* Menu de Funções */
+        .feature-list { text-align: left; margin-bottom: 25px; }
+        .feature-item {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .feature-item:last-child { border-bottom: none; }
+        
+        .info b { display: block; font-size: 14px; margin-bottom: 2px; }
+        .info span { font-size: 11px; color: var(--text-dim); }
+
+        /* Switch Customizado */
+        .toggle { position: relative; width: 44px; height: 24px; }
+        .toggle input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background: #333; transition: .4s; border-radius: 30px;
+        }
+        .slider:before {
+            position: absolute; content: ""; height: 18px; width: 18px;
+            left: 3px; bottom: 3px; background: white; transition: .4s; border-radius: 50%;
+        }
+        input:checked + .slider { background: var(--primary); }
+        input:checked + .slider:before { transform: translateX(20px); }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: rgba(0, 255, 100, 0.1);
+            color: #00ff64; padding: 6px 12px;
+            border-radius: 100px; font-size: 10px; font-weight: 700;
+            margin-bottom: 15px; text-transform: uppercase;
+        }
+
+        .hidden { display: none !important; }
+        .fade-in { animation: fadeIn 0.5s ease forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <canvas id="bgCanvas"></canvas>
+
+    <div class="container">
+        <div id="login-screen" class="fade-in">
+            <div class="app-card">
+                <div class="icon-wrapper">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="white"><path d="M13,10V3L4,16H11V21L20,8H13Z"/></svg>
+                </div>
+                <h2>LOGIN DO SISTEMA</h2>
+                <span class="subtitle">Acesso Restrito @davi.santxs7</span>
+                
+                <input type="password" id="key" placeholder="Insira sua Licença">
+                <button class="btn-main" onclick="auth()">AUTENTICAR ACESSO</button>
+            </div>
+        </div>
+
+        <div id="main-screen" class="hidden">
+            <div style="margin-bottom: 25px;">
+                <h2 style="font-size: 28px;">OTIMIZAÇÃO</h2>
+                <p style="color: var(--text-dim); font-size: 13px; margin: 5px 0 0;">Painel de Performance v5.0</p>
+            </div>
+
+            <div class="app-card fade-in">
+                <div class="status-badge">
+                    <span style="width:6px; height:6px; background:#00ff64; border-radius:50%"></span>
+                    Sistema Protegido
+                </div>
+
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <div class="info"><b>Reduzir Recuo</b><span>Calibração de DPI dinâmica</span></div>
+                        <label class="toggle"><input type="checkbox"><span class="slider"></span></label>
+                    </div>
+                    <div class="feature-item">
+                        <div class="info"><b>Input Lag</b><span>Prioridade de processo RAM</span></div>
+                        <label class="toggle"><input type="checkbox"><span class="slider"></span></label>
+                    </div>
+                    <div class="feature-item">
+                        <div class="info"><b>Touch Response</b><span>Latência de toque 1ms</span></div>
+                        <label class="toggle"><input type="checkbox"><span class="slider"></span></label>
+                    </div>
+                </div>
+
+                <button class="btn-main" onclick="startProcess()" id="proc-btn">APLICAR OTIMIZAÇÃO</button>
+                <p style="font-size: 10px; color: #444; margin-top: 20px; font-weight: 700; letter-spacing: 1px;">DEVELOPED BY @DAVI.SANTXS7</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Animação de Fundo (Partículas)
+        const canvas = document.getElementById('bgCanvas');
+        const ctx = canvas.getContext('2d');
+        let dots = [];
+        function init() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        class Dot {
+            constructor() {
+                this.x = Math.random()*canvas.width; this.y = Math.random()*canvas.height;
+                this.vX = (Math.random()-0.5)*0.5; this.vY = (Math.random()-0.5)*0.5;
+            }
+            draw() {
+                this.x += this.vX; this.y += this.vY;
+                if(this.x<0||this.x>canvas.width) this.vX *= -1;
+                if(this.y<0||this.y>canvas.height) this.vY *= -1;
+                ctx.beginPath(); ctx.arc(this.x, this.y, 1, 0, Math.PI*2);
+                ctx.fillStyle = 'rgba(255,0,0,0.4)'; ctx.fill();
+            }
+        }
+        function setup() { init(); for(let i=0; i<40; i++) dots.push(new Dot()); loop(); }
+        function loop() {
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            dots.forEach(d => d.draw());
+            requestAnimationFrame(loop);
+        }
+
+        // Lógica do App
+        function auth() {
+            const k = document.getElementById('key').value;
+            if(k === 'zz') {
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('main-screen').classList.remove('hidden');
+                document.getElementById('main-screen').classList.add('fade-in');
+            } else {
+                alert('Licença Inválida ou Expirada');
+            }
+        }
+
+        function startProcess() {
+            const b = document.getElementById('proc-btn');
+            let p = 0;
+            b.disabled = true;
+            const timer = setInterval(() => {
+                p += 5;
+                b.innerText = `PROCESSANDO ${p}%...`;
+                if(p >= 100) {
+                    clearInterval(timer);
+                    b.innerText = "SISTEMA OTIMIZADO!";
+                    b.style.background = "#00ff64";
+                    b.style.boxShadow = "0 8px 20px rgba(0, 255, 100, 0.2)";
+                }
+            }, 50);
+        }
+
+        window.onload = setup;
+        window.onresize = init;
+    </script>
+</body>
+</html>
